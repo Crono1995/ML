@@ -1,0 +1,67 @@
+import numpy as np  # Import numpy for numerical operations
+import matplotlib.pyplot as plt  # Import matplotlib for data visualization
+import pandas as pd  # Import pandas for data manipulation and analysis
+from sklearn.metrics import confusion_matrix  # Import confusion_matrix for evaluating classification models
+from sklearn.model_selection import train_test_split  # Import train_test_split for splitting the dataset
+from sklearn.preprocessing import StandardScaler  # Import StandardScaler for feature scaling
+from sklearn.neighbors import KNeighborsClassifier  # Import KNeighborsClassifier for the k-NN algorithm
+
+# Load the dataset from a CSV file
+dataset = pd.read_csv('data1.csv')
+
+# Select "Age" and "Income" columns for features (X values)
+X = dataset.iloc[:, [0, 4]].values  # Assuming the 0th column is 'Age' and the 4th column is 'Income'
+
+# Select the "tf" column for the target variable (y values)
+y = dataset.iloc[:, 5].values  # Assuming the 5th column is 'tf'
+
+# Print the feature and target arrays to inspect the data
+print(X)
+print(y)
+
+# Split the data into training and testing sets with 25% of the data as the test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+
+# Scale the features using StandardScaler
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)  # Fit the scaler to the training data and transform it
+X_test = sc_X.transform(X_test)  # Transform the test data using the same scaler (do not fit again)
+
+# Print the scaled training and testing features
+print(X_train)
+print(X_test)
+
+# Train the k-NN classifier with 5 neighbors and Minkowski distance metric (p=2 for Euclidean distance)
+classifier = KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2)
+classifier.fit(X_train, y_train)  # Fit the classifier to the training data
+
+# Make predictions on the test set
+y_pred = classifier.predict(X_test)
+
+# Compute the confusion matrix to evaluate the classification performance
+cm = confusion_matrix(y_test, y_pred)  # Correct order: actual values first, then predicted values
+print(cm)  # Print the confusion matrix
+
+ 
+ 
+ Age	Gender	Height	Weight	Income	tf
+25	M	176	70	50000	1
+35	F	162	58	60000	0
+45	M	180	85	75000	0
+30	F	155	52	55000	1
+55	F	165	60	80000	1
+65	M	172	75	90000	1
+40	F	160	65	70000	0
+50	M	178	80	85000	0
+20	F	150	45	45000	1
+22	M	170	68	48000	1
+33	F	163	55	58000	0
+47	M	183	88	78000	0
+28	F	157	48	52000	1
+37	M	175	72	63000	0
+60	F	168	62	85000	0
+29	M	174	68	52000	1
+32	F	161	57	59000	1
+43	M	179	82	76000	1
+52	F	166	64	82000	0
+26	M	177	74	52000	1
