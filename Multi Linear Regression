@@ -1,0 +1,83 @@
+import pandas as pd  # Import pandas for data manipulation and analysis
+import numpy as np  # Import numpy for numerical operations
+from sklearn.compose import ColumnTransformer  # Import ColumnTransformer for preprocessing
+from sklearn.preprocessing import OneHotEncoder  # Import OneHotEncoder for categorical variable encoding
+
+# Load the dataset from a CSV file
+data = pd.read_csv('data1.csv')
+
+# Define the feature matrix (X) and the target vector (y)
+X = data.iloc[:, :-1].values  # Select all columns except the last one for features
+y = data.iloc[:, -1].values  # Select the last column for the target
+data.head(5)  # Display the first 5 rows of the dataset for inspection
+
+###############################################
+
+# Create the ColumnTransformer to encode categorical variables
+# The 'encoder' transformer applies OneHotEncoder to the second column (index 1, assumed to be 'GENDER')
+# 'remainder' parameter set to 'passthrough' means all other columns are left unchanged
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [1])], remainder='passthrough')
+
+# Fit and transform the feature matrix X with the ColumnTransformer
+X = np.array(ct.fit_transform(X))
+
+# Display the transformed feature matrix
+X
+
+##############################################
+
+from sklearn.model_selection import train_test_split  # Import train_test_split for splitting the data
+
+# Split the dataset into training and testing sets with a test size of 20%
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+##############################################
+
+from sklearn.linear_model import LinearRegression  # Import LinearRegression model
+
+# Create a LinearRegression model instance
+regressor = LinearRegression()
+
+# Fit the model to the training data
+regressor.fit(X_train, y_train)
+
+##############################################
+
+# Predict the target values for the test set
+y_pred = regressor.predict(X_test)
+
+# Create a DataFrame to compare the real and predicted values
+df = pd.DataFrame({'Real Values': y_test, 'Predicted Values': y_pred})
+df
+
+##############################################
+
+from sklearn import metrics  # Import metrics for model evaluation
+
+# Calculate and print the root mean squared error (RMSE) of the predictions
+print(np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+
+
+
+Age,Gender,Height,Weight,Income
+25,M,176,70,50000
+35,F,162,58,60000
+45,M,180,85,75000
+30,F,155,52,55000
+55,F,165,60,80000
+65,M,172,75,90000
+40,F,160,65,70000
+50,M,178,80,85000
+20,F,150,45,45000
+22,M,170,68,48000
+33,F,163,55,58000
+47,M,183,88,78000
+28,F,157,48,52000
+37,M,175,72,63000
+60,F,168,62,85000
+29,M,174,68,52000
+32,F,161,57,59000
+43,M,179,82,76000
+52,F,166,64,82000
+26,M,177,74,52000
