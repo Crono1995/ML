@@ -1,0 +1,53 @@
+import pandas as pd  # Import pandas for data manipulation and analysis
+import numpy as np  # Import numpy for numerical operations
+import matplotlib.pyplot as plt  # Import matplotlib for data visualization
+from sklearn.linear_model import LinearRegression  # Import LinearRegression model
+
+# Load the dataset from a CSV file
+df = pd.read_csv('data1.csv')
+
+# Display the dataset to inspect its contents
+df
+
+# Create a scatter plot of the data
+plt.xlabel('Age')  # Label the x-axis as 'Age'
+plt.ylabel('Income')  # Label the y-axis as 'Income'
+plt.scatter(df.Age, df.Income, color='red', marker='+')  # Plot Age vs. Income with red '+' markers
+
+# Create a LinearRegression model instance
+reg = LinearRegression()
+
+# Fit the model to the data using 'Age' as the predictor and 'Income' as the target
+reg.fit(df[['Age']], df.Income)
+
+# Predict the income for a person who is 29 years old
+reg.predict([[29]])
+
+
+
+
+
+#####################################################
+#####################################################
+
+Age,Gender,Height,Weight,Income
+25,M,176,70,50000
+35,F,162,58,60000
+45,M,180,85,75000
+30,F,155,52,55000
+55,F,165,60,80000
+65,M,172,75,90000
+40,F,160,65,70000
+50,M,178,80,85000
+20,F,150,45,45000
+22,M,170,68,48000
+33,F,163,55,58000
+47,M,183,88,78000
+28,F,157,48,52000
+37,M,175,72,63000
+60,F,168,62,85000
+29,M,174,68,52000
+32,F,161,57,59000
+43,M,179,82,76000
+52,F,166,64,82000
+26,M,177,74,52000
