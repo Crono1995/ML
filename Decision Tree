@@ -1,0 +1,148 @@
+import pandas as pd  # Import pandas for data manipulation and analysis
+from sklearn.tree import DecisionTreeClassifier  # Import DecisionTreeClassifier for decision tree models
+from sklearn.model_selection import train_test_split  # Import train_test_split for splitting the dataset
+from sklearn import metrics  # Import metrics for evaluating model performance
+from sklearn.preprocessing import LabelEncoder  # Import LabelEncoder for encoding categorical variables
+
+# Load the dataset from a CSV file with specified column names
+col_names = ['company', 'job', 'degree', 'salary']
+data = pd.read_csv('data123.csv', header=None, names=col_names)
+
+# Display the first few rows of the dataset to inspect the data
+print("Initial data:")
+print(data.head())
+
+# Encode categorical variables as integers
+label_encoder = LabelEncoder()
+for col in ['company', 'job', 'degree']:
+    data[col] = label_encoder.fit_transform(data[col])
+
+# Display the first few rows after encoding to check the transformation
+print("\nData after label encoding:")
+print(data.head())
+
+# Define the feature columns (X) and the target variable (y)
+feature_cols = ['company', 'job', 'degree']
+X = data[feature_cols]  # Features (independent variables)
+y = data['salary']  # Target variable (dependent variable)
+
+# Split the dataset into training and testing sets with 20% of the data as the test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=100)
+
+# Initialize and train the Decision Tree classifier using the 'entropy' criterion
+clf_entropy = DecisionTreeClassifier(criterion='entropy', max_depth=2)
+clf_entropy.fit(X_train, y_train)  # Fit the classifier to the training data
+
+# Make predictions on the test set
+y_pred = clf_entropy.predict(X_test)
+
+# Calculate and print the accuracy of the model
+accuracy = metrics.accuracy_score(y_test, y_pred)
+print("\nAccuracy:", accuracy)
+
+
+############################################################################
+
+Explanation:
+Importing Libraries:
+
+pandas is used for data manipulation.
+DecisionTreeClassifier is the decision tree model used for classification.
+train_test_split is used to split the dataset into training and testing sets.
+metrics provides methods for evaluating the performance of the model.
+LabelEncoder is used to convert categorical variables into numerical values.
+Loading Data:
+
+The dataset is loaded from a CSV file and assigned custom column names.
+Encoding Categorical Variables:
+
+Categorical columns (company, job, degree) are transformed into numerical values using LabelEncoder.
+Defining Features and Target:
+
+feature_cols are the independent variables (features) used to predict the target.
+y is the dependent variable (target), in this case, salary.
+Splitting the Dataset:
+
+The dataset is split into training and testing sets, with 20% reserved for testing.
+Training the Model:
+
+A Decision Tree classifier is initialized with entropy as the criterion (which measures the quality of a split using information gain) and a maximum depth of 2.
+The model is trained on the training data.
+Making Predictions:
+
+Predictions are made on the test set.
+Evaluating the Model:
+
+The accuracy of the model is calculated and printed, indicating how well the model's predictions match the actual values.
+
+############################################################################
+
+Company	Job	Degree	Salary
+Acme Corporation	Senior Linux Engineer	Bachelor's	1
+Tech Innovators	DevOps Engineer	Master's	0
+Global Solutions	Systems Administrator	Associate's	1
+Cloud Systems Inc	Site Reliability Engineer	Bachelor's	0
+DataTech Solutions	Product Support Engineer	Bachelor's	1
+AI Dynamics	AI Solutions Architect	Master's	0
+SysAdmins Inc	Senior Linux Engineer	Bachelor's	1
+DevOps Pro	DevOps Engineer	Master's	0
+Smart Technologies	Customer Success Engineer	Bachelor's	1
+Support AI Tech	Technical Support Engineer	Associate's	0
+Data Solutions Ltd	Product Support Engineer	Bachelor's	1
+SysOps Experts	Site Reliability Engineer	Master's	0
+IT Innovations	Systems Administrator	Bachelor's	1
+CloudOps Solutions	DevOps Engineer	Associate's	0
+Tech Support Hub	Technical Support Engineer	Bachelor's	1
+AI Solutions Inc	AI Solutions Architect	Master's	0
+SysAdmin Experts	Senior Linux Engineer	Bachelor's	1
+DevOps Solutions	DevOps Engineer	Master's	0
+Customer Success Co	Customer Success Engineer	Bachelor's	1
+Support Tech	Technical Support Engineer	Associate's	0
+DataTech Support	Product Support Engineer	Bachelor's	1
+CloudOps Systems	Site Reliability Engineer	Master's	0
+IT Systems	Systems Administrator	Bachelor's	1
+DevOps Pro	DevOps Engineer	Associate's	0
+Smart Support	Technical Support Engineer	Bachelor's	1
+AI Innovations	AI Solutions Architect	Master's	0
+SysAdmins Inc	Senior Linux Engineer	Bachelor's	1
+DevOps Tech	DevOps Engineer	Master's	0
+Tech Innovators	Customer Success Engineer	Bachelor's	1
+Global Solutions	Technical Support Engineer	Associate's	0
+Cloud Systems Inc	Product Support Engineer	Bachelor's	1
+DataTech Solutions	Site Reliability Engineer	Master's	0
+AI Dynamics	Systems Administrator	Bachelor's	1
+SysAdmins Inc	DevOps Engineer	Associate's	0
+DevOps Pro	Technical Support Engineer	Bachelor's	1
+Smart Technologies	AI Solutions Architect	Master's	0
+Support AI Tech	Senior Linux Engineer	Bachelor's	1
+Data Solutions Ltd	DevOps Engineer	Master's	0
+SysOps Experts	Customer Success Engineer	Bachelor's	1
+IT Innovations	Technical Support Engineer	Associate's	0
+CloudOps Solutions	Product Support Engineer	Bachelor's	1
+Tech Support Hub	Site Reliability Engineer	Master's	0
+AI Solutions Inc	Systems Administrator	Bachelor's	1
+SysAdmin Experts	DevOps Engineer	Associate's	0
+DevOps Solutions	Technical Support Engineer	Bachelor's	1
+Customer Success Co	AI Solutions Architect	Master's	0
+Support Tech	Senior Linux Engineer	Bachelor's	1
+DataTech Support	DevOps Engineer	Master's	0
+CloudOps Systems	Customer Success Engineer	Bachelor's	1
+IT Systems	Technical Support Engineer	Associate's	0
+DevOps Pro	Product Support Engineer	Bachelor's	1
+Smart Support	Site Reliability Engineer	Master's	0
+AI Innovations	Systems Administrator	Bachelor's	1
+SysAdmins Inc	DevOps Engineer	Associate's	0
+DevOps Tech	Technical Support Engineer	Bachelor's	1
+Tech Innovators	AI Solutions Architect	Master's	0
+Global Solutions	Senior Linux Engineer	Bachelor's	1
+Cloud Systems Inc	DevOps Engineer	Master's	0
+DataTech Solutions	Customer Success Engineer	Bachelor's	1
+AI Dynamics	Technical Support Engineer	Associate's	0
+SysAdmins Inc	Product Support Engineer	Bachelor's	1
+DevOps Pro	Site Reliability Engineer	Master's	0
+Smart Technologies	Systems Administrator	Bachelor's	1
+Support AI Tech	DevOps Engineer	Associate's	0
+Data Solutions Ltd	Technical Support Engineer	Bachelor's	1
+SysOps Experts	AI Solutions Architect	Master's	0
+IT Innovations	Senior Linux Engineer	Bachelor's	1
+CloudOps Solutions	DevOps Engineer	Master's	0
