@@ -1,0 +1,165 @@
+# Import necessary libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+# Load dataset
+dataset = pd.read_csv("data2.csv")  # Read the dataset from a CSV file
+
+# Select features and target variable
+X = dataset.iloc[:, [2, 4]].values  # Features: columns 2 and 4
+y = dataset.iloc[:, 4].values       # Target variable: column 4
+
+# Split the dataset into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+# test_size=0.25 means 25% of the data is used for testing
+# random_state=0 ensures that the split is reproducible
+
+# Standardize features by removing the mean and scaling to unit variance
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)  # Fit and transform the training data
+X_test = sc_X.transform(X_test)         # Transform the test data using the same scaler
+
+# Train the Logistic Regression model
+classifier = LogisticRegression(random_state=0)  # Initialize the model
+classifier.fit(X_train, y_train)                # Fit the model on the training data
+
+# Make predictions on the test data
+y_pred = classifier.predict(X_test)  # Predict the labels for the test set
+print("Predicted values:", y_pred)  # Display the predicted values
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred)  # Compute confusion matrix from true and predicted labels
+print("Confusion Matrix:\n", cm)      # Print the confusion matrix
+
+# Visualize the confusion matrix using a heatmap
+plt.figure(figsize=(8, 6))  # Set the size of the figure
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Class 0', 'Class 1'], yticklabels=['Class 0', 'Class 1'])
+# annot=True adds the numerical values in the heatmap, fmt='d' formats them as integers
+plt.xlabel('Predicted Labels')  # Label for the x-axis
+plt.ylabel('True Labels')       # Label for the y-axis
+plt.title('Confusion Matrix Heatmap')  # Title of the heatmap
+plt.show()  # Display the heatmap
+
+
+
+##############################
+##############################
+##############################
+
+UserID,Gender,Age,EstimatedSalary,Purchased
+1,Male,22,25000,0
+2,Female,35,55000,1
+3,Male,29,48000,0
+4,Female,40,72000,1
+5,Male,31,62000,0
+6,Female,28,43000,1
+7,Male,45,80000,1
+8,Female,33,59000,0
+9,Male,27,35000,0
+10,Female,41,73000,1
+11,Male,30,50000,0
+12,Female,37,62000,1
+13,Male,24,29000,0
+14,Female,39,68000,1
+15,Male,32,54000,0
+16,Female,26,47000,1
+17,Male,44,75000,1
+18,Female,34,60000,0
+19,Male,28,31000,0
+20,Female,42,69000,1
+21,Male,33,55000,0
+22,Female,29,46000,1
+23,Male,47,82000,1
+24,Female,31,59000,0
+25,Male,26,30000,0
+26,Female,36,64000,1
+27,Male,35,67000,0
+28,Female,30,50000,1
+29,Male,40,74000,1
+30,Female,27,42000,0
+31,Male,38,63000,1
+32,Female,43,71000,1
+33,Male,29,47000,0
+34,Female,32,58000,1
+35,Male,41,75000,1
+36,Female,26,39000,0
+37,Male,34,53000,1
+38,Female,39,66000,0
+39,Male,27,31000,0
+40,Female,28,42000,1
+41,Male,46,78000,1
+42,Female,33,59000,0
+43,Male,30,54000,1
+44,Female,44,71000,1
+45,Male,31,60000,0
+46,Female,35,65000,1
+47,Male,29,47000,0
+48,Female,40,72000,1
+49,Male,37,58000,1
+50,Female,26,41000,0
+51,Male,25,28000,0
+52,Female,30,53000,1
+53,Male,42,69000,1
+54,Female,38,64000,0
+55,Male,28,32000,0
+56,Female,27,47000,1
+57,Male,37,67000,1
+58,Female,33,56000,0
+59,Male,29,50000,0
+60,Female,41,71000,1
+61,Male,31,52000,0
+62,Female,39,69000,1
+63,Male,34,55000,0
+64,Female,32,60000,1
+65,Male,45,73000,1
+66,Female,27,43000,0
+67,Male,28,34000,0
+68,Female,29,48000,1
+69,Male,38,68000,1
+70,Female,36,61000,0
+71,Male,26,30000,0
+72,Female,31,55000,1
+73,Male,33,56000,0
+74,Female,40,72000,1
+75,Male,37,69000,1
+76,Female,28,41000,0
+77,Male,42,75000,1
+78,Female,34,60000,0
+79,Male,27,33000,0
+80,Female,38,68000,1
+81,Male,31,54000,0
+82,Female,32,59000,1
+83,Male,29,49000,0
+84,Female,45,74000,1
+85,Male,25,29000,0
+86,Female,37,62000,1
+87,Male,44,71000,1
+88,Female,26,44000,0
+89,Male,30,52000,0
+90,Female,39,66000,1
+91,Male,32,55000,0
+92,Female,41,69000,1
+93,Male,34,57000,0
+94,Female,27,42000,1
+95,Male,29,50000,0
+96,Female,42,72000,1
+97,Male,26,31000,0
+98,Female,33,57000,1
+99,Male,35,65000,1
+100,Female,28,43000,0
+101,Male,37,67000,1
+102,Female,30,54000,1
+103,Male,26,32000,0
+104,Female,38,68000,1
+105,Male,28,30000,0
+106,Female,31,55000,1
+107,Male,44,74000,1
+108,Female,35,60000,0
+109,Male,29,49000,0
+110,Female,37,62000,1
