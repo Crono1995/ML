@@ -1,0 +1,43 @@
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+# Load dataset
+df = pd.read_csv('data1.csv')
+
+# Scatter plot for Age vs Income
+plt.scatter(df.Age, df.Income, color='red', marker='+')
+plt.xlabel('Age')
+plt.ylabel('Income')
+plt.show()
+
+# Linear regression model
+reg = LinearRegression()
+reg.fit(df[['Age']], df.Income)
+
+# Predict income for age 29
+predicted_income = reg.predict([[29]])
+print(f"Predicted income for a 29-year-old: {predicted_income[0]:.2f}")
+
+
+Age,Gender,Height,Weight,Income
+25,M,176,70,50000
+35,F,162,58,60000
+45,M,180,85,75000
+30,F,155,52,55000
+55,F,165,60,80000
+65,M,172,75,90000
+40,F,160,65,70000
+50,M,178,80,85000
+20,F,150,45,45000
+22,M,170,68,48000
+33,F,163,55,58000
+47,M,183,88,78000
+28,F,157,48,52000
+37,M,175,72,63000
+60,F,168,62,85000
+29,M,174,68,52000
+32,F,161,57,59000
+43,M,179,82,76000
+52,F,166,64,82000
+26,M,177,74,52000
