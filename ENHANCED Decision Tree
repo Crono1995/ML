@@ -1,0 +1,147 @@
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score
+
+# Load and preprocess dataset
+data = pd.read_csv('data123.csv', header=None, names=['company', 'job', 'degree', 'salary'])
+data[['company', 'job', 'degree']] = data[['company', 'job', 'degree']].apply(LabelEncoder().fit_transform)
+
+# Split dataset
+X = data[['company', 'job', 'degree']]
+y = data['salary']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=100)
+
+# Train and evaluate Decision Tree classifier
+clf = DecisionTreeClassifier(criterion='entropy', max_depth=2)
+clf.fit(X_train, y_train)
+accuracy = accuracy_score(y_test, clf.predict(X_test))
+
+print(f"Model Accuracy: {accuracy:.2f}")
+
+
+
+
+##################################################
+PERSISTENT TRAINED DATA MODEL
+##################################################
+import pandas as pd
+import joblib
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score
+import os
+
+# File paths
+DATA_FILE = 'data123.csv'
+MODEL_FILE = 'trained_model.pkl'
+
+# Load or create dataset
+def load_dataset():
+    if os.path.exists(DATA_FILE):
+        data = pd.read_csv(DATA_FILE, header=0)
+    else:
+        # Create the dataset if it doesn't exist
+        data_content = """
+Company,Job,Degree,Salary
+Acme Corporation,Sr Linux Engineer,Bachelor's,1
+Tech Innovators,DevOps Engineer,Master's,0
+Global Solutions,Systems Administrator,Associate's,1
+Cloud Systems Inc,Site Reliability Engineer,Bachelor's,0
+DataTech Solutions,Product Support Engineer,Bachelor's,1
+"""
+        with open(DATA_FILE, 'w') as f:
+            f.write(data_content.strip())
+        data = pd.read_csv(DATA_FILE, header=0)
+    return data
+
+# Save the dataset
+def save_dataset(data):
+    data.to_csv(DATA_FILE, index=False)
+
+# Train the model
+def train_model(data):
+    label_encoder = LabelEncoder()
+    for col in ['Company', 'Job', 'Degree']:
+        data[col] = label_encoder.fit_transform(data[col])
+    
+    X = data[['Company', 'Job', 'Degree']]
+    y = data['Salary']
+    
+    clf = DecisionTreeClassifier(criterion='entropy', max_depth=2)
+    clf.fit(X, y)
+    
+    joblib.dump(clf, MODEL_FILE)
+    print("Model trained and saved.")
+
+# Load the model
+def load_model():
+    if os.path.exists(MODEL_FILE):
+        return joblib.load(MODEL_FILE)
+    else:
+        print("No trained model found. Training a new one.")
+        data = load_dataset()
+        train_model(data)
+        return joblib.load(MODEL_FILE)
+
+# Add new data to the dataset
+def add_new_data(new_entry):
+    data = load_dataset()
+    new_data = pd.DataFrame([new_entry])
+    data = pd.concat([data, new_data], ignore_index=True)
+    save_dataset(data)
+    print("New data added to the dataset.")
+
+# Predict with the model
+def predict_with_model(new_input):
+    clf = load_model()
+    data = load_dataset()
+    
+    # Encode the input based on the dataset's encoders
+    label_encoder = LabelEncoder()
+    for col in ['Company', 'Job', 'Degree']:
+        data[col] = label_encoder.fit_transform(data[col])
+        new_input[col] = label_encoder.fit_transform(new_input[col])
+    
+    X_new = pd.DataFrame(new_input)
+    predictions = clf.predict(X_new)
+    print("Predictions:", predictions)
+
+# Evaluate model accuracy
+def evaluate_model():
+    data = load_dataset()
+    clf = load_model()
+    
+    label_encoder = LabelEncoder()
+    for col in ['Company', 'Job', 'Degree']:
+        data[col] = label_encoder.fit_transform(data[col])
+    
+    X = data[['Company', 'Job', 'Degree']]
+    y = data['Salary']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print("Model accuracy:", accuracy)
+
+# Example usage
+if __name__ == "__main__":
+    # Ensure dataset and model exist
+    data = load_dataset()
+    if not os.path.exists(MODEL_FILE):
+        train_model(data)
+    
+    # Evaluate the model
+    evaluate_model()
+    
+    # Predict with new input
+    new_input = [{'Company': 'Tech Innovators', 'Job': 'DevOps Engineer', 'Degree': "Master's"}]
+    predict_with_model(new_input)
+    
+    # Add new data and retrain
+    new_entry = {'Company': 'New Co', 'Job': 'AI Architect', 'Degree': "PhD", 'Salary': 1}
+    add_new_data(new_entry)
+    train_model(load_dataset())
+    evaluate_model()
